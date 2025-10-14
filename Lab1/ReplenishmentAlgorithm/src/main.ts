@@ -18,7 +18,7 @@ function generateStrings(length: number): string[] {
 // Все имеющиеся правила переписывание, приходится вручную добавлять, тк не знаю как оптимизировать. Правила которые в коментариях это те которые отпали после минимизации 
 const Rules: ((word: string) => string | null)[] = [
     //Это Изначальные правила _______________________________________________
-    /*(word: string): string | null => {
+    (word: string): string | null => {
         if (word.includes('baaa')) {
             return word.replace('baaa', 'aaab');
         }
@@ -29,7 +29,7 @@ const Rules: ((word: string) => string | null)[] = [
             return word.replace('abab', 'aabb');
         }
         return null;
-    },*/
+    },
     (word: string): string | null => {
         if (word.includes('bab')) {
             return word.replace('bab', 'aa');
