@@ -42,7 +42,7 @@ babab → ab
 4. aaab → ab
 5. bbb → b
 
-Далее я написал алгоритм пополнения правил по Кнуту–Бендиксу, он находится в [ReplenishmentAlgorithm](https://github.com/mike032005/TFL_BMSTU/blob/main/Lab1/ReplenishmentAlgorithm/src/main.ts). Применив его, получил следующую систему:
+Далее я написал алгоритм пополнения правил по Кнуту–Бендиксу, он находится в [ReplenishmentAlgorithm](ReplenishmentAlgorithm/src/main.ts). Применив его, получил следующую систему:
 
 1. baaa → aaab
 2. abab → aabb
@@ -92,7 +92,7 @@ babab → ab
 
 ## 3) Фаззинг-тестирование
 
-[FuzzingTest](Lab1/FuzzingTest/src/main.ts)
+[FuzzingTest](FuzzingTest/src/main.ts)
 
 ## 4) Инварианты
 
@@ -101,4 +101,4 @@ babab → ab
 1. Чётность количества символов 'b'
 2. (количество_символов_a + длина_строки) mod 2
 
-[MetamorfTest](Lab1/MetamorfTest/src/main.ts)
+[MetamorfTest](MetamorfTest/src/main.ts)
