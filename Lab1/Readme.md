@@ -92,7 +92,7 @@ babab → ab
 
 ## 3) Фаззинг-тестирование
 
-[FuzzingTest](FuzzingTest/src/main.ts)
+[FuzzingTest](FazzingTest/src/main.ts)
 
 ## 4) Инварианты
 
