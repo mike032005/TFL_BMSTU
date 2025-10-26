@@ -26,6 +26,7 @@ interface RewriteStep {
     invariants: InvariantCheck[];
 }
 
+// просто коммент 
 class MetamorfT {
     private static countB(word: string): number {
         return (word.match(/b/g) || []).length;
@@ -150,6 +151,8 @@ class MetamorfT {
             currentWord = newWord;
 
             let bParityCheck = this.checkB(currentWord, initBParity);
+
+            
             let aLengthCheck = this.checkA(currentWord, initALengthValue);
 
             sequence.push({
