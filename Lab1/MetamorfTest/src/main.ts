@@ -8,9 +8,9 @@ const T_prime: SRS = [
     ['aab', 'ab'],
     ['aba', 'ab'],
     ['abb', 'aa'],
-    ['baa', 'ab'],
-    ['baaa', 'aaab'],
-    ['abab', 'aabb']
+    ['baa', 'ab']
+    //['baaa', 'aaab'],
+    //['abab', 'aabb']
 ];
 
 interface InvariantCheck {
