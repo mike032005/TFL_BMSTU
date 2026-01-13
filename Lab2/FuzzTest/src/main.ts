@@ -197,102 +197,97 @@ interface SimpleAutomaton {
 }
 
 class AFA {
-    private readonly automata: {
-        first: DFA;
-        second: SimpleAutomaton;
-        third: SimpleAutomaton;
-    };
+    private readonly leftAutomaton: NFA;    
+    private readonly rightAutomaton: DFAForS; 
 
     constructor() {
-        this.automata = {
-            first: new DFA(),
-            second: this.buildSecondAutomaton(),
-            third: this.buildThirdAutomaton()
-        };
-    }
-
-    private buildSecondAutomaton(): SimpleAutomaton {
-        const transitions: Map<number, Map<string, number>> = new Map([
-            [26, new Map([['a', 27], ['b', 28], ['c', 30]])],
-            [27, new Map([['a', 26], ['b', 30], ['c', 30]])],
-            [28, new Map([['a', 30], ['b', 29], ['c', 30]])],
-            [29, new Map([['a', 27], ['b', 28], ['c', 30]])],
-            [30, new Map([['a', 30], ['b', 30], ['c', 30]])]
-        ]);
-
-        const acceptStates: Set<number> = new Set([26, 28, 29]);
-
-        return { transitions, acceptStates, startState: 26 };
-    }
-
-    private buildThirdAutomaton(): SimpleAutomaton {
-        const transitions: Map<number, Map<string, number>> = new Map([
-            [60, new Map([['a', 61], ['b', 62], ['c', 63]])],
-            [61, new Map([['a', 64], ['b', 65], ['c', 63]])],
-            [62, new Map([['a', 63], ['b', 60], ['c', 63]])],
-            [63, new Map([['a', 63], ['b', 63], ['c', 63]])],
-            [64, new Map([['a', 61], ['b', 62], ['c', 66]])],
-            [65, new Map([['a', 67], ['b', 63], ['c', 63]])],
-            [66, new Map([['a', 68], ['b', 65], ['c', 63]])],
-            [67, new Map([['a', 63], ['b', 63], ['c', 63]])],
-            [68, new Map([['a', 63], ['b', 63], ['c', 66]])]
-        ]);
-
-        const acceptStates: Set<number> = new Set([67]);
-
-        return { transitions, acceptStates, startState: 60 };
-    }
-
-    private runAutomaton(automaton: SimpleAutomaton, input: string): boolean {
-        let currentState: number = automaton.startState;
-        
-        for (const char of input) {
-            const stateTransitions: Map<string, number> | undefined = automaton.transitions.get(currentState);
-            if (!stateTransitions) return false;
-            
-            const nextState: number | undefined = stateTransitions.get(char);
-            if (nextState === undefined) return false;
-            
-            currentState = nextState;
-        }
-
-        return automaton.acceptStates.has(currentState);
+        this.leftAutomaton = new NFA();
+        this.rightAutomaton = new DFAForS();
     }
 
     checkWord(input: string): boolean {
-        const firstResult: boolean = this.automata.first.checkWord(input);
-        const secondResult: boolean = this.runAutomaton(this.automata.second, input);
-        const thirdResult: boolean = this.runAutomaton(this.automata.third, input);
+        const leftResult: boolean = this.leftAutomaton.checkWord(input);
+        const rightResult: boolean = this.rightAutomaton.checkWord(input);
 
-        const acceptCount: number = [firstResult, secondResult, thirdResult].filter(Boolean).length;
-        
-        return acceptCount >= 2;
+        return leftResult && rightResult;
     }
 
     getDetailedResults(input: string): {
         word: string;
-        firstResult: boolean;
-        secondResult: boolean;
-        thirdResult: boolean;
+        leftResult: boolean;
+        rightResult: boolean;
         finalResult: boolean;
     } {
-        const firstResult: boolean = this.automata.first.checkWord(input);
-        const secondResult: boolean = this.runAutomaton(this.automata.second, input);
-        const thirdResult: boolean = this.runAutomaton(this.automata.third, input);
-        
-        const acceptCount: number = [firstResult, secondResult, thirdResult].filter(Boolean).length;
-        const finalResult: boolean = acceptCount >= 2;
+        const leftResult: boolean = this.leftAutomaton.checkWord(input);
+        const rightResult: boolean = this.rightAutomaton.checkWord(input);
+        const finalResult: boolean = leftResult && rightResult;
 
         return {
             word: input,
-            firstResult,
-            secondResult,
-            thirdResult,
+            leftResult,
+            rightResult,
             finalResult
         };
     }
 }
 
+class DFAForS {
+    private readonly transitions: Map<string, Map<string, string>>;
+    private readonly startState: string = "s0";
+    private readonly acceptStates: Set<string>;
+
+    constructor() {
+        this.transitions = new Map();
+        this.acceptStates = new Set(["s0", "s1", "s2"]);
+        this.setupTransitions();
+    }
+
+    private setupTransitions(): void {
+        const states = ["s0", "s1", "s2", "s3", "T"];
+        for (const state of states) {
+            this.transitions.set(state, new Map());
+        }
+
+        this.addTransition("s0", "a", "s1");
+        this.addTransition("s0", "b", "s2");
+        this.addTransition("s0", "c", "T");
+        this.addTransition("s1", "a", "s1");
+        this.addTransition("s1", "b", "s2");
+        this.addTransition("s1", "c", "s3");
+        this.addTransition("s2", "a", "s1");
+        this.addTransition("s2", "b", "s2");
+        this.addTransition("s2", "c", "s3");
+        this.addTransition("s3", "a", "s1");
+        this.addTransition("s3", "b", "s2");
+        this.addTransition("s3", "c", "T");
+        this.addTransition("T", "a", "T");
+        this.addTransition("T", "b", "T");
+        this.addTransition("T", "c", "T");
+    }
+
+    private addTransition(from: string, symbol: string, to: string): void {
+        const fromMap = this.transitions.get(from);
+        if (fromMap) {
+            fromMap.set(symbol, to);
+        }
+    }
+
+    checkWord(input: string): boolean {
+        let currentState: string = this.startState;
+        
+        for (const char of input) {
+            const stateTransitions: Map<string, string> | undefined = this.transitions.get(currentState);
+            if (!stateTransitions) return false;
+            
+            const nextState: string | undefined = stateTransitions.get(char);
+            if (!nextState) return false;
+            
+            currentState = nextState;
+        }
+
+        return this.acceptStates.has(currentState);
+    }
+}
 class WordGenerator {
     static generateWord(maxLength: number = 20): string {
         const letters: string[] = ['a', 'b', 'c'];
@@ -319,12 +314,12 @@ class WordGenerator {
 class AutomataTester {
     private readonly dfa: DFA;
     private readonly nfa: NFA;
-    private readonly afa: AFA;
+    private readonly AFA: AFA;  
 
     constructor() {
         this.dfa = new DFA();
         this.nfa = new NFA();
-        this.afa = new AFA();
+        this.AFA = new AFA();  
     }
 
     testSingleWord(word: string): { 
@@ -344,25 +339,24 @@ class AutomataTester {
         };
     }
 
-    testafaWord(word: string): ReturnType<AFA['getDetailedResults']> {
-        return this.afa.getDetailedResults(word);
+    testAFAWord(word: string): ReturnType<AFA['getDetailedResults']> {
+        return this.AFA.getDetailedResults(word);
     }
 
     runTests(wordCount: number = 10, maxLength: number = 20): {
         comparisonResults: Array<ReturnType<AutomataTester['testSingleWord']>>,
-        afaResults: Array<ReturnType<AFA['getDetailedResults']>>
+        AFAResults: Array<ReturnType<AFA['getDetailedResults']>>  
     } {
         const words: string[] = WordGenerator.generateWords(wordCount, maxLength);
         
         const comparisonResults: Array<ReturnType<AutomataTester['testSingleWord']>> = [];
-        const afaResults: Array<ReturnType<AFA['getDetailedResults']>> = [];
-        
+        const AFAResults: Array<ReturnType<AFA['getDetailedResults']>> = [];  
         for (const word of words) {
             comparisonResults.push(this.testSingleWord(word));
-            afaResults.push(this.testafaWord(word));
+            AFAResults.push(this.testAFAWord(word));
         }
         
-        return { comparisonResults, afaResults };
+        return { comparisonResults, AFAResults };  
     }
 
     findDifference(maxTests: number = 1000): ReturnType<AutomataTester['testSingleWord']> | null {
@@ -382,47 +376,27 @@ class AutomataTester {
 function runDemo(): void {
     const tester: AutomataTester = new AutomataTester();
 
-    console.log('=== СРАВНЕНИЕ ДКА И НКА ===');
-    console.log('Генерируем случайные слова для тестирования...\n');
-
-    const testData = tester.runTests(6, 12);
-
-    console.log('Результаты сравнения:');
-    console.log('Слово'.padEnd(15) + 'НКА'.padEnd(8) + 'ДКА'.padEnd(8) + 'Совпадение');
-    console.log('-'.repeat(45));
-    
-    testData.comparisonResults.forEach(result => {
-        console.log(
-            `"${result.word}"`.padEnd(15) +
-            (result.nfaResult ? 'Да' : 'Нет').padEnd(8) +
-            (result.dfaResult ? 'Да' : 'Нет').padEnd(8) +
-            (result.match ? 'ДА' : 'НЕТ')
-        );
-    });
-
-    console.log('\n=== ПОИСК РАСХОЖДЕНИЙ ===');
+    console.log('\n Проверка эквивалентности ДКА и НКА');
     const difference = tester.findDifference(5000);
     
     if (difference) {
-        console.log('Найдено расхождение между ДКА и НКА:');
         console.log(`Слово: "${difference.word}"`);
         console.log(`НКА: ${difference.nfaResult ? 'принял' : 'отклонил'}`);
         console.log(`ДКА: ${difference.dfaResult ? 'принял' : 'отклонил'}`);
     } else {
-        console.log('Расхождений не найдено (проверено 5000 слов)');
+        console.log('Отличий не найдено (проверено 5000 слов)');
     }
 
-    console.log('\n=== ТЕСТИРОВАНИЕ ПКА ===');
-    const testWords: string[] = ['a', 'b', 'ab', 'ba', 'aa', 'bb', 'abc', 'aaa', 'baa'];
+
+    console.log('\n Проверка ПКА');
+    const randomTest = tester.runTests(50, 10);
     
-    testWords.forEach(word => {
-        const result = tester.testafaWord(word);
+    randomTest.AFAResults.forEach(result => {
         console.log(
-            `"${word}"`.padEnd(10) +
-            `Авт1:${result.firstResult ? 'Да' : 'Нет'}`.padEnd(10) +
-            `Авт2:${result.secondResult ? 'Да' : 'Нет'}`.padEnd(10) +
-            `Авт3:${result.thirdResult ? 'Да' : 'Нет'}`.padEnd(12) +
-            `Итог: ${result.finalResult ? 'ПРИНЯТО' : 'ОТКЛОНЕНО'}`
+            `"${result.word}"`.padEnd(20) +
+            (result.leftResult ? 'Принял' : 'Отклонил').padEnd(10) +
+            (result.rightResult ? 'Принял' : 'Отклонил').padEnd(12) +
+            (result.finalResult ? 'ПРИНЯТО' : 'ОТКЛОНЕНО')
         );
     });
 }
