@@ -238,27 +238,24 @@ class DFAForS {
 
     constructor() {
         this.transitions = new Map();
-        this.acceptStates = new Set(["s0", "s1", "s2"]);
+        this.acceptStates = new Set(["s0", "s1"]);
         this.setupTransitions();
     }
 
     private setupTransitions(): void {
-        const states = ["s0", "s1", "s2", "s3", "T"];
+        const states = ["s0", "s1", "s3", "T"];
         for (const state of states) {
             this.transitions.set(state, new Map());
         }
 
         this.addTransition("s0", "a", "s1");
-        this.addTransition("s0", "b", "s2");
+        this.addTransition("s0", "b", "s1");
         this.addTransition("s0", "c", "T");
         this.addTransition("s1", "a", "s1");
-        this.addTransition("s1", "b", "s2");
+        this.addTransition("s1", "b", "s1");
         this.addTransition("s1", "c", "s3");
-        this.addTransition("s2", "a", "s1");
-        this.addTransition("s2", "b", "s2");
-        this.addTransition("s2", "c", "s3");
         this.addTransition("s3", "a", "s1");
-        this.addTransition("s3", "b", "s2");
+        this.addTransition("s3", "b", "s1");
         this.addTransition("s3", "c", "T");
         this.addTransition("T", "a", "T");
         this.addTransition("T", "b", "T");
