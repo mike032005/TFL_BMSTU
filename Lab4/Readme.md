@@ -23,10 +23,10 @@
 
 Рассмотрим слово A следующего вида:
 
-A = bba bb(abb)^h a aba aba a bb(abb)^(h+1) bb(abb)^h a aba aba a bb(abb)^(h+1) abb
+A = bba bb(abb)<sup>h</sup> a aba aba a bb(abb)<sup>h+1</sup> bb(abb)<sup>h</sup> a aba aba a bb(abb)<sup>h+1</sup> abb
 где:
 
-- T<sub>1</sub> и T<sub>2</sub> имеют структуру bb(abb)^h и bb(abb)^(h+1) соответсвенно 
+- T<sub>1</sub> и T<sub>2</sub> имеют структуру bb(abb)<sup>h</sup> и bb(abb)<sup>h+1</sup> соответсвенно 
 - Пусть T<sub>1</sub>.v < T<sub>2</sub>.v, то есть количество блоков "bb" в T<sub>1</sub> меньше, чем в T<sub>2</sub>
 
 ### Слово A пренадлежит языку L
@@ -39,8 +39,8 @@ A = bba bb(abb)^h a aba aba a bb(abb)^(h+1) bb(abb)^h a aba aba a bb(abb)^(h+1) 
 
 Рассмотрим структуры T<sub>1</sub> и T<sub>2</sub>
 
-- T<sub>1</sub> = bb(abb)^h (его длинна равна p/2, T<sub>1</sub>.v = h+1)
-- T<sub>2</sub> = bb(abb)^(h+1) (его длинна длина p/2+3, T<sub>2</sub>.v = h+2)
+- T<sub>1</sub> = bb(abb)<sup>h</sup> (его длинна равна p/2, T<sub>1</sub>.v = h+1)
+- T<sub>2</sub> = bb(abb)<sup>h+1</sup> (его длинна длина p/2+3, T<sub>2</sub>.v = h+2)
 
 Причем k < m, так что T<sub>1</sub>.v < T<sub>2</sub>.v.
 
@@ -62,7 +62,7 @@ S<sub>2</sub>.v = min(T<sub>1</sub>.v , T<sub>2</sub>.v) = T<sub>1</sub>.v
 - |vy| >= 1
 
 
-### Случай 1: vxy лежит внутри bb(abb)^h
+### Случай 1: vxy лежит внутри bb(abb)<sup>h</sup>
 
 При накачке (например, i = 0) T<sub>1</sub> = bb(abb)<sup>h</sup> уменьшится, станет T<sub>1</sub>' = bb(abb)<sup>h-k</sup>, тогда T<sub>1</sub>'.v < T<sub>1</sub>.v. Тогда:
 
