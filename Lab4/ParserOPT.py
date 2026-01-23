@@ -82,7 +82,7 @@ class AttributeGrammarParser:
                 while j >= 0 and self.string[j] == 'b':
                     b_count += 1
                     j -= 1
-                
+                    
                 if b_count % 2 == 0:
                     if b_count == 0 or (j >= 0 and (self.string[j] == 'a' or self.string[j] == 'S')) or j < 0:
                         start_pos = i - b_count

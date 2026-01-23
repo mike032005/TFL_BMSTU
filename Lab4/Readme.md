@@ -23,11 +23,11 @@
 
 Рассмотрим слово A следующего вида:
 
-A = bba bb(abb)<sup>h</sup> a aba aba a bb(abb)<sup>h+1</sup> bb(abb)<sup>h</sup> a aba aba a bb(abb)<sup>h+1</sup> abb
+A = bba bb(abb)<sup>2h-1</sup> a aba aba a bb(abbabb)<sup>h</sup> bb(abb)<sup>2h-1</sup> a aba aba a bb(abbabb)<sup>h</sup> abb
 где:
 
-- T<sub>1</sub> и T<sub>2</sub> имеют структуру bb(abb)<sup>h</sup> и bb(abb)<sup>h+1</sup> соответсвенно 
-- Пусть T<sub>1</sub>.v < T<sub>2</sub>.v, то есть количество блоков "bb" в T<sub>1</sub> меньше, чем в T<sub>2</sub>
+- T<sub>1</sub> и T<sub>2</sub> имеют структуру bb(abb)<sup>2h-1</sup> и bb(abbabb)<sup>h</sup> соответсвенно 
+- Причем T<sub>1</sub>.v < T<sub>2</sub>.v, то есть количество блоков "bb" в T<sub>1</sub> меньше, чем в T<sub>2</sub>
 
 ### Слово A пренадлежит языку L
 
@@ -39,8 +39,8 @@ A = bba bb(abb)<sup>h</sup> a aba aba a bb(abb)<sup>h+1</sup> bb(abb)<sup>h</sup
 
 Рассмотрим структуры T<sub>1</sub> и T<sub>2</sub>
 
-- T<sub>1</sub> = bb(abb)<sup>h</sup> (его длинна равна p/2, T<sub>1</sub>.v = h+1)
-- T<sub>2</sub> = bb(abb)<sup>h+1</sup> (его длинна длина p/2+3, T<sub>2</sub>.v = h+2)
+- T<sub>1</sub> = bb(abb)<sup>2h-1</sup> (его длинна равна p/2, T<sub>1</sub>.v = 2h)
+- T<sub>2</sub> = bb(abbabb)<sup>h</sup> (его длинна длина p/2+3, T<sub>2</sub>.v = 2h+1)
 
 Причем k < m, так что T<sub>1</sub>.v < T<sub>2</sub>.v.
 
@@ -62,26 +62,26 @@ S<sub>2</sub>.v = min(T<sub>1</sub>.v , T<sub>2</sub>.v) = T<sub>1</sub>.v
 - |vy| >= 1
 
 
-### Случай 1: vxy лежит внутри bb(abb)<sup>h</sup>
+### Случай 1: vxy лежит внутри bb(abb)<sup>2h-1</sup>
 
-При накачке (например, i = 0) T<sub>1</sub> = bb(abb)<sup>h</sup> уменьшится, станет T<sub>1</sub>' = bb(abb)<sup>h-k</sup>, тогда T<sub>1</sub>'.v < T<sub>1</sub>.v. Тогда:
+При накачке (например, i = 0) T<sub>1</sub> = bb(abb)<sup>2h-1</sup> уменьшится, станет T<sub>1</sub>' = bb(abb)<sup>2h-k</sup>, где k>1, тогда T<sub>1</sub>'.v < T<sub>1</sub>.v. Тогда:
 
 Атрибуты S<sub>1</sub>.v не равен S<sub>2</sub>.v следовательно слово вне языка 
 
 
-### Случай 2: vxy лежит внутри bb(abb)<sup>h+1</sup>
+### Случай 2: vxy лежит внутри bb(abbabb)<sup>h</sup>
 
-При накачке (i = 0) чтобы сохранить структуру T<sub>2</sub> =  bb(abb)<sup>h+1</sup> ,  мы уберем минимум 6 символов, т.е длинна T<sub>2</sub> уменьшится (станет p/2 - 3), атрибут T<sub>2</sub>.v = h следовательно атрибут T<sub>2</sub>.v станет меньше T<sub>1</sub>.v (равен h+1) следовательно равенство атрибутов S<sub>1</sub>.v и S<sub>2</sub>.v нарушится и слово не будет пренадлежать языку.
+При накачке (i = 0) чтобы сохранить структуру T<sub>2</sub> =  bb(abbabb)<sup>h</sup> ,  мы уберем минимум 6 символов, т.е длинна T<sub>2</sub> уменьшится (станет p/2 - 3), атрибут T<sub>2</sub>.v = 2h-1 следовательно атрибут T<sub>2</sub>.v станет меньше T<sub>1</sub>.v (равен 2h) следовательно равенство атрибутов S<sub>1</sub>.v и S<sub>2</sub>.v нарушится и слово не будет пренадлежать языку.
 
 ### Случай 3: vxy лежит внутри S<sub>1</sub> -> T<sub>1</sub> a aba aba a T<sub>2</sub>
 
-В таком случае, чтобы не нарушть структуру, мы можем только накачивать одновременно T<sub>1</sub> = bb(abb)<sup>h</sup> и T<sub>2</sub> = bb(abb)<sup>h+1</sup>, но тогда атрибут S<sub>1</sub>.v изменяется, а S<sub>2</sub>.v остается неизменным, равенство нарушается, слово не пренадлежит языку 
+В таком случае, чтобы не нарушть структуру, мы можем только накачивать одновременно T<sub>1</sub> = bb(abb)<sup>2h-1</sup> и T<sub>2</sub> = bb(abbabb)<sup>h</sup>, но тогда атрибут S<sub>1</sub>.v изменяется, а S<sub>2</sub>.v остается неизменным, равенство нарушается, слово не пренадлежит языку 
 
 vxy не может захватить больше чем T<sub>1</sub> a aba aba a T<sub>2</sub>, т.к даже длинна T<sub>2</sub>T<sub>1</sub> равна p+3, а длинна vxy максимум p
 
-### Случай 4: vxy Лежит в T<sub>2</sub>T<sub>1</sub> = bb(abb)<sup>h+1</sup>bb(abb)<sup>h</sup>
+### Случай 4: vxy Лежит в T<sub>2</sub>T<sub>1</sub> = bb(abbabb)<sup>h</sup>bb(abb)<sup>2h-1</sup>
 
-В таком случае, при нулевой накачке T<sub>1</sub> = bb(abb)<sup>h</sup> точно уменьшается, т.е опять уменьшается атрибут S<sub>2</sub>.v, а S<sub>1</sub>.v остается неизменным, равенство нарушается. Слово не пренадлежит языку.
+В таком случае, при нулевой накачке T<sub>1</sub> = bb(abb)<sup>2h-1</sup> точно уменьшается, т.е опять уменьшается атрибут S<sub>2</sub>.v, а S<sub>1</sub>.v остается неизменным, равенство нарушается. Слово не пренадлежит языку.
 
 ### Случай 5: vxy охватывает границу между компонентами
 
